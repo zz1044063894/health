@@ -54,7 +54,7 @@ public class OfficialSeal2CaAction extends BaseBean implements Action {
 
         String url = baseUrl + tokenUrl;
         String param = "clientId=" + clientId + "&appSecret=" + appSecret;
-        String keyword = "国家卫生健康委员会";//盖章关键字
+        String keyword = "国家卫生健康委项目资金监管服务中心";//盖章关键字
         String billKey = EMPTY_KEY;
         //获取accessToken接口青求
         String billTable = requestInfo.getRequestManager().getBillTableName();
@@ -68,10 +68,12 @@ public class OfficialSeal2CaAction extends BaseBean implements Action {
             rs.execute(sql);
             String fjId = EMPTY_KEY;//附件id
             String wd = EMPTY_KEY;//文档id
+            String gzwz="2";
             if (rs.next()) {
                 fjId = Util.null2String(rs.getString("gzwj"));
                 wd = Util.null2String(rs.getString("thhwd"));
                 billKey = Util.null2String(rs.getString("gjz"));
+                gzwz = Util.null2String(rs.getString("gzwz"));
             }
             writeLog("------------------->INFO:  sql " + sql + " fjID " + fjId);
             //文档相关操作
@@ -106,12 +108,14 @@ public class OfficialSeal2CaAction extends BaseBean implements Action {
                 Map<String, String> headMap = new HashMap<>(2);
                 headMap.put("clientId", clientId);
                 headMap.put("accessToken", accessToken);
-                Map<String, String> bodyMap = new HashMap<>(3);
+                Map<String, String> bodyMap = new HashMap<>(4);
                 //pdf数组字节的base64编码格式
 
                 bodyMap.put("pdfBase64", pdfBase64);
                 bodyMap.put("keyword", keyword);
                 bodyMap.put("departId", departId);
+                bodyMap.put("searchNum", gzwz);
+
                 //bodyMap.put("moveType", EMPTY_KEY);
 
                 Map<String, Map<String, String>> requestMap = new HashMap<>(2);
